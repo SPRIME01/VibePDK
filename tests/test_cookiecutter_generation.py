@@ -144,3 +144,39 @@ def test_generated_project_installs_and_tests_pass(cookies: CookiesFixture) -> N
         pytest.fail(
             f"Command '{' '.join(cpe.cmd)}' failed with exit code {cpe.returncode}"
         )
+
+
+def test_templates_exist(cookies: CookiesFixture) -> None:
+    """
+    Test that all required spec/plan/tasks template files exist in the generated project.
+    This test verifies Cycle 4 requirements for the speckit-feature-adoption-plan.
+    """
+    result: BakeResult = cookies.bake()
+    assert result.exit_code == 0
+    assert result.exception is None
+
+    project_path: Path = result.project_path
+    prompts_dir: Path = project_path / ".github" / "prompts"
+
+    # List of required template files for Cycle 4
+    required_files = [
+        "spec.feature.template.md",
+        "spec.plan.adr.prompt.md",
+        "spec.plan.prd.prompt.md",
+        "spec.plan.sds.prompt.md",
+        "spec.plan.ts.prompt.md",
+        "spec.plan.task.prompt.md",
+        "spec.tasks.template.md"
+    ]
+
+    missing_files = []
+    for filename in required_files:
+        file_path = prompts_dir / filename
+        if not file_path.is_file():
+            missing_files.append(filename)
+
+    if missing_files:
+        pytest.fail(
+            f"Missing required template files in {prompts_dir}: {', '.join(missing_files)}. "
+            f"These files are required for Cycle 4 of the speckit-feature-adoption-plan."
+        )

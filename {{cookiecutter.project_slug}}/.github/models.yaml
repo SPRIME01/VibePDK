@@ -2,8 +2,12 @@ defaults:
   prompt_model: GPT-4.1
   chatmode_model: GPT-5 mini (Preview)
 
+models:
+  - GPT-4.1
+  - GPT-5 mini (Preview)
+
 notes:
   - Centralize defaults for prompts and chat modes.
   - Individual files may override model; keep this as the single source of truth.
   - No automatic templating is wired; treat as documentation + convention.
-
+  - Models listed here are validated against prompt frontmatter.

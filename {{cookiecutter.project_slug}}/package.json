@@ -6,6 +6,9 @@
     "license": "MIT",
     "scripts": {
         "test:node": "tsx tools/test/run_node_tests.ts",
+        "spec:feature": "bash scripts/spec_scaffold.sh .github/prompts/spec.feature.template.md docs/specs \"$1\" \"$2\" \"\" \"$3\" \"\" \"\" \"\" \"\"",
+        "spec:plan": "bash scripts/spec_scaffold.sh .github/prompts/spec.plan.$3.prompt.md docs/specs \"$1\" \"$2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8\"",
+        "spec:tasks": "bash scripts/spec_scaffold.sh .github/prompts/spec.tasks.template.md docs/specs \"$1\" \"$2\" \"\" \"\" \"\" \"\" \"\" \"$3\"",
         "spec:matrix": "node tools/spec/matrix.js",
         "prompt:lint": "for f in .github/prompts/*.prompt.md; do node tools/prompt/lint.js \"$f\" || exit 1; done",
         "prompt:plan": "for f in .github/prompts/*.prompt.md; do node tools/prompt/plan_preview.js \"$f\" || exit 1; done",
@@ -18,17 +21,18 @@
         "lint:shell": "shellcheck scripts/*.sh"
     },
     "devDependencies": {
-        "@types/node": "^22.5.4",
         "@dqbd/tiktoken": "^1.0.15",
         "@nx/devkit": "19.8.4",
-        "nx": "19.8.4",
-        "tsx": "^4.16.2",
-        "typescript": "^5.5.4",
-        "markdownlint-cli": "^0.36.0",
-        "markdownlint": "^0.36.0",
+        "@types/node": "^22.5.4",
         "husky": "^8.0.0",
+        "js-yaml": "^4.1.0",
         "lint-staged": "^14.0.0",
-        "shellcheck": "^4.1.0"
+        "markdownlint": "^0.36.0",
+        "markdownlint-cli": "^0.36.0",
+        "nx": "19.8.4",
+        "shellcheck": "^4.1.0",
+        "tsx": "^4.16.2",
+        "typescript": "^5.5.4"
     },
     "pnpm": {
         "overrides": {

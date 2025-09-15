@@ -87,14 +87,36 @@ ai-validate:
 
 # Thin wrapper for Nx generate (prints guidance if pnpm missing)
 ai-scaffold name="":
-	@if [ -z "{{ '{{name}}' }}" ]; then \
-		echo "Usage: just ai:scaffold name=<generator>"; \
-		echo "Example: just ai:scaffold name=@nx/js:lib"; \
-	else \
-		if command -v pnpm > /dev/null 2>&1; then \
-			echo "Running: pnpm exec nx g {{ '{{name}}' }}"; \
-			pnpm exec nx g {{ '{{name}}' }}; \
-		else \
-			echo "pnpm not found. Please run: pnpm exec nx g {{ '{{name}}' }}"; \
-		fi; \
-	fi
+  @if [ -z "{{ '{{name}}' }}" ]; then \
+    echo "Usage: just ai:scaffold name=<generator>"; \
+    echo "Example: just ai:scaffold name=@nx/js:lib"; \
+  else \
+    if command -v pnpm > /dev/null 2>&1; then \
+      echo "Running: pnpm exec nx g {{ '{{name}}' }}"; \
+      pnpm exec nx g {{ '{{name}}' }}; \
+    else \
+      echo "pnpm not found. Please run: pnpm exec nx g {{ '{{name}}' }}"; \
+    fi; \
+  fi
+
+# --- Spec-kit integration recipes ---
+
+# Scaffold a feature spec from template
+spec-feature thread="" feature_name="" prd_id="":
+  bash scripts/spec_scaffold.sh .github/prompts/spec.feature.template.md docs/specs {{thread}} {{feature_name}} "" {{prd_id}}
+
+# Scaffold a plan spec from template based on family
+spec-plan thread="" feature_name="" family="" prd_id="" adr_id="" sds_id="" ts_id="" task_id="":
+  bash scripts/spec_scaffold.sh .github/prompts/spec.plan.{{family}}.prompt.md docs/specs {{thread}} {{feature_name}} {{family}} {{prd_id}} {{adr_id}} {{sds_id}} {{ts_id}} {{task_id}}
+
+# Scaffold tasks from template
+spec-tasks thread="" feature_name="" task_id="":
+  bash scripts/spec_scaffold.sh .github/prompts/spec.tasks.template.md docs/specs {{thread}} {{feature_name}} "" "" "" "" "" {{task_id}}
+
+# Lint prompts using existing tool
+prompt-lint:
+  pnpm run prompt:lint
+
+# Run traceability matrix tool
+spec-matrix:
+  pnpm run spec:matrix
